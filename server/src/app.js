@@ -1,29 +1,37 @@
-const { ApolloServer } = require('apollo-server');
+import { ApolloServer } from 'apollo-server';
 
-const { PORT } = require('./config').server;
-const { DB_USER, DB_PASS } = require('./config').db;
-const { connectToDB } = require('./utils/db/dbcon');
-const typeDefs = require('./graphql/schemas');
-const resolvers = require('./graphql/resolvers');
+import config from './config/index.js';
+import dbConn from './utils/dbcon.js';
+import typeDefs from './graphql/typeDefs.js';
+import resolvers from './graphql/resolvers/index.js';
+
+const { PORT, HOST } = config.server;
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => ({ req }),
+  playground: {
+    settings: {
+      'editor.theme': 'dark',
+    },
+  },
 });
 
-connectToDB({ dbURI: `mongodb+srv://${DB_USER}:${DB_PASS}>@firstcluster.goz45.mongodb.net/test?retryWrites=true&w=majority` }).then(async () => {
-  try {
-    const connected = await server.listen({
-      port: PORT,
+const startServer = () => {
+  dbConn
+    .connectToDB(config.db.DB_URI)
+    .then(() => {
+      console.info('Successfully connected to the database');
+      return server.listen(PORT, HOST);
+    })
+    .then(({ url }) => {
+      console.info(`The server is up and running on ${url}`);
+    })
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
     });
-    if (connected) {
-      console.info(`The server is up and running on ${connected.url}`);
-    }
-  } catch (err) {
-    console.error('Unable to connect to the server');
-    console.error(err);
-  }
-}).catch((err) => {
-  console.error('Unable to connect to the database');
-  console.error(err);
-});
+};
+
+startServer();

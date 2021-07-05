@@ -1,50 +1,56 @@
-const { Schema, model } = require('mongoose');
-const { toDate } = require('date-fns');
+import mongoose from 'mongoose';
 
-const PostSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'users',
-  },
-  content: {
-    type: String,
-    minlength: [3, 'Content is too short'],
-    trim: true,
-    required: [true, 'Content is required!'],
-  },
-  comments: [
-    {
-      content: {
-        type: String,
-        minlength: [3, 'Content is too short'],
-        trim: true,
-        required: [true, 'Content is required!'],
-      },
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'users',
-      },
-      createdAt: {
-        type: Date,
-        default: toDate(new Date()),
-      },
-    },
-  ],
-  likes: [
-    {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'users',
-      },
-      createdAt: {
-        type: Date,
-        default: toDate(new Date()),
-      },
-    },
-  ],
-}, {
-  timestamps: true,
-  strict: true,
-});
+const { Schema, model } = mongoose;
 
-module.exports = model('Post', PostSchema);
+const CommentSchema = new Schema(
+  {
+    body: {
+      type: String,
+      minlength: [6, 'Comment body is too short!'],
+      required: [true, 'Comment body is required!'],
+      trim: true,
+    },
+    username: { type: String, ref: 'users' },
+  },
+  {
+    timestamps: true,
+    strict: true,
+  },
+);
+
+const LikeSchema = new Schema(
+  {
+    username: {
+      type: String,
+      ref: 'users',
+    },
+  },
+  {
+    timestamps: true,
+    strict: true,
+  },
+);
+
+const PostSchema = new Schema(
+  {
+    body: {
+      type: String,
+      minlength: [6, 'Post body is too short!'],
+      maxlength: [240, 'Post body is too long!'],
+      required: [true, 'Post body is required!'],
+      trim: true,
+    },
+    username: {
+      type: String,
+      ref: 'users',
+    },
+    comments: [CommentSchema],
+    likes: [LikeSchema],
+  },
+  {
+    strict: true,
+    timestamps: true,
+  },
+);
+
+export default model('Post', PostSchema);

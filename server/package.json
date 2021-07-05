@@ -1,36 +1,37 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
-  "main": "src/app.js",
+  "type": "module",
+  "description": "React Express GraphQL Social Media Application",
+  "main": "app.js",
   "scripts": {
     "dev": "node src/app.js",
-    "start": "nodemon src/app.js --exec 'npm run lint && node'",
-    "prod": "pm2 start src/app.js",
-    "lint": "eslint --ext .js src/",
-    "lint:fix": "eslint --ext .js src/ --fix",
+    "start": "nodemon src/app.js --exec \" npm run lint && node \"",
+    "lint": "eslint -c .eslintrc.json src/ --ext .js",
+    "lint:fix": "eslint -c .eslintrc.json src/ --ext .js --fix",
+    "prod": "echo \"Error: no test specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "Express"
-  ],
   "author": "Pasham Akhil Kumar Reddy",
   "license": "MIT",
   "dependencies": {
-    "apollo-server": "^2.19.1",
+    "apollo-server": "^2.25.2",
     "bcryptjs": "^2.4.3",
-    "date-fns": "^2.16.1",
-    "dotenv": "^8.2.0",
-    "graphql": "^15.4.0",
+    "date-fns": "^2.22.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "graphql": "^15.5.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.9",
-    "pm2": "^4.5.1",
-    "uuid": "^8.3.2"
+    "mongoose": "^5.13.1",
+    "nanoid": "^3.1.23",
+    "pm2": "^5.1.0",
+    "ramda": "^0.27.1",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
-    "eslint": "^7.17.0",
+    "eslint": "^7.30.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "nodemon": "^2.0.6"
+    "eslint-plugin-import": "^2.23.4",
+    "nodemon": "^2.0.9"
   }
 }
