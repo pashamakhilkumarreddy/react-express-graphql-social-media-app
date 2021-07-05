@@ -1,1 +1,1 @@
-# react-express-social-media
+# React Express GraphQL Social Media Application
