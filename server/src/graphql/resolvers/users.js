@@ -4,9 +4,10 @@ import { validateAuthInput } from '../../utils/validations.js';
 
 export default {
   Mutation: {
-    async login(_, { email, password }, context, info) {
+    // eslint-disable-next-line no-unused-vars
+    async login(_, { loginInput: { email, password } }, context, info) {
       try {
-        console.info(context, info);
+        // console.info(context, info);
         const errors = validateAuthInput(email, password);
         if (Object.values(errors).length) {
           throw new UserInputError('Invalid User Input', {
@@ -17,7 +18,7 @@ export default {
           email,
         });
         if (user) {
-          const validUser = await User.comparePassword(password);
+          const validUser = await user.comparePassword(password);
           if (validUser) {
             const refreshToken = await user.genRefreshToken();
             const accessToken = await user.genAccessToken();
@@ -47,9 +48,10 @@ export default {
         throw new Error(err);
       }
     },
+    // eslint-disable-next-line no-unused-vars
     async register(_, { registerInput: { email, password } }, context, info) {
       try {
-        console.info(context, info);
+        // console.info(context, info);
         const errors = validateAuthInput(email, password);
         if (Object.values(errors).length) {
           throw new UserInputError('Invalid User Input', {
@@ -86,4 +88,5 @@ export default {
       }
     },
   },
+  Subscription: {},
 };

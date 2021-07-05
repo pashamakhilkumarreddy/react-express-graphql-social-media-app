@@ -35,8 +35,8 @@ const PostSchema = new Schema(
   {
     body: {
       type: String,
-      minlength: [6, 'Post body is too short!'],
-      maxlength: [240, 'Post body is too long!'],
+      minlength: [3, 'Post body is too short!'],
+      // maxlength: [240, 'Post body is too long!'],
       required: [true, 'Post body is required!'],
       trim: true,
     },
@@ -52,5 +52,9 @@ const PostSchema = new Schema(
     timestamps: true,
   },
 );
+
+PostSchema.virtual('id').get(function getId() {
+  return this._id;
+});
 
 export default model('Post', PostSchema);

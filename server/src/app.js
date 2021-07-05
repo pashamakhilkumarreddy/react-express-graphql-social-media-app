@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer, PubSub } from 'apollo-server';
 
 import config from './config/index.js';
 import dbConn from './utils/dbcon.js';
@@ -7,10 +7,12 @@ import resolvers from './graphql/resolvers/index.js';
 
 const { PORT, HOST } = config.server;
 
+const pubsub = new PubSub();
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req }),
+  context: ({ req }) => ({ req, pubsub }),
   playground: {
     settings: {
       'editor.theme': 'dark',

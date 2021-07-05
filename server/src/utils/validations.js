@@ -1,7 +1,10 @@
+import mongoose from 'mongoose';
 import {
   EMPTY_EMAIL,
   EMPTY_PASSWORD,
   IN_VALID_EMAIL,
+  IN_VALID_BODY,
+  IN_VALID_OBJECT_ID,
 } from './constants/constants.js';
 import { EMAIL_REGEX } from './constants/regex.js';
 
@@ -28,6 +31,30 @@ export const isValidPassword = (password = '') => {
     message: EMPTY_PASSWORD,
   });
   if (typeof password === 'string' && password.trim()) {
+    message.isValid = true;
+    return message;
+  }
+  return message;
+};
+
+export const isValidBody = (val = '') => {
+  const message = Object.seal({
+    isValid: false,
+    message: IN_VALID_BODY,
+  });
+  if (typeof val === 'string' && val.trim()) {
+    message.isValid = true;
+    return message;
+  }
+  return message;
+};
+
+export const isMongoObjectId = (id = '') => {
+  const message = Object.seal({
+    isValid: false,
+    message: IN_VALID_OBJECT_ID,
+  });
+  if (id && mongoose.Types.ObjectId.isValid(id)) {
     message.isValid = true;
     return message;
   }
